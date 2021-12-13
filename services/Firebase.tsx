@@ -1,5 +1,22 @@
 import auth from '@react-native-firebase/auth';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+
+export async function onGoogleButtonPress() {
+  GoogleSignin.configure({
+    webClientId:
+      '822067726768-qb2n6u07eo3khn1qmkukq69rjckmp36m.apps.googleusercontent.com',
+  });
+
+  // Get the users ID token
+  const {idToken} = await GoogleSignin.signIn();
+
+  // Create a Google credential with the token
+  const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+  // Sign-in the user with the credential
+  return auth().signInWithCredential(googleCredential);
+}
 
 export async function onFacebookButtonPress() {
   // Attempt login with permissions
