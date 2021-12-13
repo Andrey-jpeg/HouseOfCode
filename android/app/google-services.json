@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "822067726768",
+    "project_id": "houseofcode-cba8f",
+    "storage_bucket": "houseofcode-cba8f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822067726768:android:9b0c2885340b6152b02e75",
+        "android_client_info": {
+          "package_name": "com.houseofcode"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "822067726768-0l3u6jcjd8edl75iogp5iq2hmo4pr7n9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.houseofcode",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "822067726768-qb2n6u07eo3khn1qmkukq69rjckmp36m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARff9YOSA6WNAN6uk4tpdiPsgsued-sSM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "822067726768-qb2n6u07eo3khn1qmkukq69rjckmp36m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "822067726768-k36f7sh1dcpohi5k1n2du078qveqt9t6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.houseOfCode.testApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

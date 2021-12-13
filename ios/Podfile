@@ -3,6 +3,8 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '11.0'
 
+pod 'GoogleSignIn', '~> 6.0.2'
+
 target 'HouseOfCode' do
   config = use_native_modules!
 
@@ -11,6 +13,7 @@ target 'HouseOfCode' do
     # to enable hermes on iOS, change `false` to `true` and then install pods
     :hermes_enabled => false
   )
+
 
   target 'HouseOfCodeTests' do
     inherit! :complete
