@@ -1,6 +1,7 @@
-import React from 'react';
-import {SafeAreaView, TouchableOpacity} from 'react-native';
-import {SocialIcon} from 'react-native-elements';
+import {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import React, {useState} from 'react';
+import {SafeAreaView, Text, TouchableOpacity, Alert} from 'react-native';
+import {Overlay, SocialIcon} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {onFacebookButtonPress, onGoogleButtonPress} from '../services/Firebase';
 
@@ -8,22 +9,20 @@ import {onFacebookButtonPress, onGoogleButtonPress} from '../services/Firebase';
 Icon.loadFont();
 
 export const LoginScreen: React.FC = () => {
+  const signInErrorHandler = (
+    callback: Promise<FirebaseAuthTypes.UserCredential>,
+  ) => {
+    callback.catch(error => Alert.alert('whoops something went wrong!'));
+  };
+
   return (
     <SafeAreaView>
       <TouchableOpacity
-        onPress={() =>
-          onFacebookButtonPress().then(() =>
-            console.log('Signed in with facebook!'),
-          )
-        }>
+        onPress={() => signInErrorHandler(onFacebookButtonPress())}>
         <SocialIcon title="Sign In With Facebook" button type="facebook" />
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() =>
-          onGoogleButtonPress().then(() =>
-            console.log('Signed in with google!'),
-          )
-        }>
+        onPress={() => signInErrorHandler(onGoogleButtonPress())}>
         <SocialIcon title="Sign In With Google" button type="google" />
       </TouchableOpacity>
     </SafeAreaView>
