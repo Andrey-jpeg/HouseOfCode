@@ -44,3 +44,9 @@ export async function onFacebookButtonPress() {
   // Sign-in the user with the credential
   return auth().signInWithCredential(facebookCredential);
 }
+
+export async function signOut() {
+  auth()
+    .signOut()
+    .then(() => console.log('User signed out!'));
+}
