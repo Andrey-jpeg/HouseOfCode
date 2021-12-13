@@ -1,7 +1,7 @@
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import React, {useState} from 'react';
-import {SafeAreaView, Text, TouchableOpacity, Alert} from 'react-native';
-import {Overlay, SocialIcon} from 'react-native-elements';
+import React from 'react';
+import {SafeAreaView, TouchableOpacity, Alert} from 'react-native';
+import {SocialIcon} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {onFacebookButtonPress, onGoogleButtonPress} from '../services/Firebase';
 
@@ -12,7 +12,7 @@ export const LoginScreen: React.FC = () => {
   const signInErrorHandler = (
     callback: Promise<FirebaseAuthTypes.UserCredential>,
   ) => {
-    callback.catch(error => Alert.alert('whoops something went wrong!'));
+    callback.catch(_error => Alert.alert('whoops something went wrong!'));
   };
 
   return (
