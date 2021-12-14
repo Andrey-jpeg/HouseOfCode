@@ -1,6 +1,6 @@
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import React from 'react';
-import {SafeAreaView, TouchableOpacity, Alert} from 'react-native';
+import {SafeAreaView, TouchableOpacity, Alert, Image, View} from 'react-native';
 import {SocialIcon} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {onFacebookButtonPress, onGoogleButtonPress} from '../services/Firebase';
@@ -17,6 +17,18 @@ export const LoginScreen: React.FC = () => {
 
   return (
     <SafeAreaView>
+      <View
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}>
+        <Image
+          source={{
+            uri: 'https://goodkarmaofficer.dk/wp-content/uploads/house-of-code.png',
+          }}
+          style={{resizeMode: 'contain', width: 300, height: 200}}
+        />
+      </View>
       <TouchableOpacity
         onPress={() => signInErrorHandler(onFacebookButtonPress())}>
         <SocialIcon title="Sign In With Facebook" button type="facebook" />

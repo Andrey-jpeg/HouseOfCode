@@ -6,6 +6,11 @@ import {SplashScreen} from '../screens/SplashScreen';
 
 import {LoginScreen} from '../screens/LoginScreen';
 import {ChatRoomsScreen} from '../screens/ChatroomsScreen';
+import {ChatRoom} from '../screens/ChatRoom';
+import {Button} from 'react-native';
+import {Text} from 'react-native-elements';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {signOut} from '../services/Firebase';
 
 const Stack = createStackNavigator();
 
@@ -53,12 +58,17 @@ export const MainStack: React.FC = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="ChatRoomsScreen"
+          name="Chat rooms"
           component={ChatRoomsScreen}
           options={{
-            headerShown: false,
+            headerRight: () => (
+              <TouchableOpacity onPress={() => signOut()}>
+                <Text> Log out </Text>
+              </TouchableOpacity>
+            ),
           }}
         />
+        <Stack.Screen name="Chat room" component={ChatRoom} />
       </Stack.Navigator>
     </NavigationContainer>
   );

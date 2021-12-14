@@ -5,47 +5,76 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   FlatList,
+  RefreshControl,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {ChatRoomsItem} from '../components/ChatRoomsItem';
 import {signOut} from '../services/Firebase';
+import firestore from '@react-native-firebase/firestore';
 
-type chatRoom = {
+export type chatRoom = {
+  id: string;
   title: string;
   description: string;
 };
 
-const chatRooms: chatRoom[] = [
-  {
-    title: 'Chatroom 1',
-    description: 'This is my first chatroom :)',
-  },
-  {
-    title: 'Chatroom 2',
-    description: 'This is my 2nd chatroom :)',
-  },
-  {
-    title: 'Chatroom 3',
-    description: 'This is my 3rd chatroom :)',
-  },
-];
-
 export const ChatRoomsScreen: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [refreshing, setRefreshing] = React.useState<boolean>(false);
+  const [chatRooms, setChatRooms] = useState<chatRoom[]>([]);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    query();
+    setRefreshing(false);
+  }, []);
+
+  function query() {
+    setChatRooms([]);
+    firestore()
+      .collection('chatRooms')
+      .orderBy('latestMessage', 'desc')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+          const chatRoom: chatRoom = {
+            id: documentSnapshot.id,
+            title: documentSnapshot.data().title,
+            description: documentSnapshot.data().description,
+          };
+          setChatRooms(prevState => [...prevState, chatRoom]);
+        });
+      });
+  }
+
+  useEffect(() => {
+    query();
+    setLoading(false);
+  }, []);
+
+  // if i don't use renderItem middleware i can't pass navigation as prop to the chatRoomsItem component
+  const renderItem = ({item}: chatRoom) => (
+    <ChatRoomsItem
+      id={item.id}
+      title={item.title}
+      description={item.description}
+    />
+  );
 
   return loading ? (
-    <ActivityIndicator />
+    <View>
+      <ActivityIndicator size={'large'} />
+    </View>
   ) : (
-    <SafeAreaView>
+    <View>
       <FlatList
+        style={{height: '100%'}}
         data={chatRooms}
-        renderItem={ChatRoomsItem}
+        renderItem={renderItem}
         keyExtractor={(item, index) => index}
-        bounces={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
-      <TouchableOpacity onPress={() => signOut()}>
-        <Text> Sign me out! </Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 };
