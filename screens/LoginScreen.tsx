@@ -16,7 +16,12 @@ export const LoginScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView
+      style={{
+        display: 'flex',
+        flex: 1,
+        justifyContent: 'center',
+      }}>
       <View
         style={{
           display: 'flex',
