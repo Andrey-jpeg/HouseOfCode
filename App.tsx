@@ -7,13 +7,23 @@ const App = () => {
   const [isLoading, setIsLoading] = useState<Boolean>(true);
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
 
+  /* since i have 2 functions that listen
+  on onAuthStateChanged i need to add a guard clause.
+  else it complains about memory leak :) */
   useEffect(() => {
+    let mounted = true;
     auth().onAuthStateChanged(userState => {
-      setUser(userState);
+      if (mounted) {
+        setUser(userState);
+      }
 
       if (isLoading) {
         setIsLoading(false);
       }
+
+      return () => {
+        mounted = false;
+      };
     });
   }, [isLoading]);
 

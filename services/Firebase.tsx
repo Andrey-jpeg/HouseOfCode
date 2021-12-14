@@ -1,6 +1,36 @@
-import auth from '@react-native-firebase/auth';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import firestore from '@react-native-firebase/firestore';
+
+/*This function checks if the userState has changed and awaits currentuser. 
+I could check if a user with the id alrady exists in the database but this is fine as,
+if the user updates their info it will be auto updated when signing in to the app.
+*/
+export const storeUserInDB = async () => {
+  try {
+    auth().onAuthStateChanged(async userState => {
+      const user: FirebaseAuthTypes.User | null = await auth().currentUser;
+      if (userState !== null && user !== null) {
+        const db = await firestore();
+        try {
+          db.collection('users').doc(user.uid).set({
+            uid: user.uid,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            email: user.email,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        return;
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export async function onGoogleButtonPress() {
   try {
@@ -19,6 +49,8 @@ export async function onGoogleButtonPress() {
     return auth().signInWithCredential(googleCredential);
   } catch (error) {
     throw error;
+  } finally {
+    storeUserInDB();
   }
 }
 
@@ -50,6 +82,8 @@ export async function onFacebookButtonPress() {
     return auth().signInWithCredential(facebookCredential);
   } catch (error) {
     throw error;
+  } finally {
+    storeUserInDB();
   }
 }
 
