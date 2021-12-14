@@ -1,14 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  ActivityIndicator,
-  FlatList,
-  RefreshControl,
-} from 'react-native';
+import {View, ActivityIndicator, FlatList, RefreshControl} from 'react-native';
 import {ChatRoomsItem} from '../components/ChatRoomsItem';
-import {signOut} from '../services/Firebase';
 import firestore from '@react-native-firebase/firestore';
 
 export type chatRoom = {
@@ -70,7 +62,7 @@ export const ChatRoomsScreen: React.FC = () => {
         style={{height: '100%'}}
         data={chatRooms}
         renderItem={renderItem}
-        keyExtractor={(item, index) => index}
+        keyExtractor={(_item, index) => index}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
