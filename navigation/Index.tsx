@@ -1,13 +1,13 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import linking from '../services/Linking';
 
 import {SplashScreen} from '../screens/SplashScreen';
 
 import {LoginScreen} from '../screens/LoginScreen';
 import {ChatRoomsScreen} from '../screens/ChatroomsScreen';
 import {ChatRoom} from '../screens/ChatRoom';
-import {Button} from 'react-native';
 import {Text} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {signOut} from '../services/Firebase';
@@ -55,7 +55,7 @@ export const AuthStack: React.FC = () => {
 
 export const MainStack: React.FC = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator>
         <Stack.Screen
           name="Chat rooms"

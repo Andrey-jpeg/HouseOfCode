@@ -2,10 +2,50 @@ import React, {useCallback, useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
 import {GiftedChat, IMessage} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
+import PushNotification from 'react-native-push-notification';
+import {Alert} from 'react-native';
 
 export const ChatRoom: React.FC = ({route}) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const currentChatRoom = route.params.chatRoomId;
+  const currentChatRoom: string = route.params.chatRoomId;
+
+  const handleNotification = async () => {
+    const notificationForRoom = await firestore()
+      .collection('chatRooms')
+      .doc(currentChatRoom)
+      .get();
+    if (
+      notificationForRoom?._data?.allowNotifications === auth().currentUser?.uid
+    ) {
+      PushNotification.localNotification({
+        channelId: 'test-channel',
+        title: 'You recieved a new message!',
+        message: 'demo://app/chatroom/' + currentChatRoom,
+      });
+    } else {
+      createTwoButtonAlert();
+    }
+  };
+
+  const updatePermissions = () => {
+    firestore()
+      .collection('chatRooms')
+      .doc(currentChatRoom)
+      .update({allowNotifications: auth().currentUser?.uid});
+  };
+
+  const createTwoButtonAlert = () =>
+    Alert.alert(
+      'Notifications?',
+      'Do you wish to recieve notifications for this room?',
+      [
+        {
+          text: 'No thank you',
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => updatePermissions()},
+      ],
+    );
 
   useEffect(() => {
     const unsubscribe = firestore()
@@ -29,6 +69,7 @@ export const ChatRoom: React.FC = ({route}) => {
 
   const onSend = useCallback(
     (messages = []) => {
+      handleNotification();
       setMessages(previousMessages =>
         GiftedChat.append(previousMessages, messages),
       );
@@ -54,7 +95,7 @@ export const ChatRoom: React.FC = ({route}) => {
       renderUsernameOnMessage={true}
       onSend={messages => onSend(messages)}
       user={{
-        _id: auth()?.currentUser?.email,
+        _id: auth()?.currentUser?.uid,
         name: auth()?.currentUser?.displayName,
         avatar: auth()?.currentUser?.photoURL,
       }}
