@@ -29,3 +29,16 @@ index 193772a..4e80378 100644
          };
          this.renderTypingIndicator = () => {
              if (Platform.OS === 'web') {
+diff --git a/node_modules/react-native-gifted-chat/lib/MessageImage.js b/node_modules/react-native-gifted-chat/lib/MessageImage.js
+index dd0000e..2965539 100644
+--- a/node_modules/react-native-gifted-chat/lib/MessageImage.js
++++ b/node_modules/react-native-gifted-chat/lib/MessageImage.js
+@@ -3,7 +3,7 @@ import React, { Component } from 'react';
+ import { Image, StyleSheet, View, } from 'react-native';
+ // TODO: support web
+ // @ts-ignore
+-import Lightbox from 'react-native-lightbox';
++import Lightbox from 'react-native-lightbox-v2';
+ import { StylePropType } from './utils';
+ const styles = StyleSheet.create({
+     container: {},

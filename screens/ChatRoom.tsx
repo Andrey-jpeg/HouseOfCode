@@ -1,14 +1,24 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
-import {GiftedChat, IMessage} from 'react-native-gifted-chat';
+import {
+  GiftedChat,
+  IMessage,
+  Actions,
+  ActionsProps,
+} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
 import PushNotification from 'react-native-push-notification';
 import {Alert} from 'react-native';
 import firebase from '@react-native-firebase/app';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {utils} from '@react-native-firebase/app';
+import storage from '@react-native-firebase/storage';
 
 export const ChatRoom: React.FC = ({route}) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const currentChatRoom: string = route.params.chatRoomId;
+  const [photo, setPhoto] = useState<any>(null);
 
   const updatePermissions = useCallback(() => {
     firestore()
@@ -73,6 +83,7 @@ export const ChatRoom: React.FC = ({route}) => {
             createdAt: doc.data().createdAt.toDate(),
             text: doc.data().text,
             user: doc.data().user,
+            image: doc.data()?.image,
           })),
         ),
       );
@@ -92,10 +103,14 @@ export const ChatRoom: React.FC = ({route}) => {
 
   const onSend = useCallback(
     (messages = []) => {
+      if (photo) {
+        uploadPhoto();
+        messages[0].image = 'https://reactjs.org/logo-og.png';
+      }
       setMessages(previousMessages =>
         GiftedChat.append(previousMessages, messages),
       );
-      const {_id, createdAt, text, user} = messages[0];
+      const {_id, createdAt, text, image, user} = messages[0];
       firestore()
         .collection('chatRooms')
         .doc(currentChatRoom)
@@ -104,17 +119,69 @@ export const ChatRoom: React.FC = ({route}) => {
           _id,
           createdAt,
           text,
+          image,
           user,
         });
     },
     [currentChatRoom],
   );
 
+  const uploadPhoto = async () => {
+    const uploadUri = photo.assets[0].uri;
+    const fileName = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
+
+    try {
+      await storage().ref(fileName).putFile(uploadUri);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleChoosePhoto = useCallback(async () => {
+    const options = {
+      noData: true,
+      mediaType: 'photo',
+    };
+    const result = await launchImageLibrary(options, setPhoto);
+    console.log(result);
+  });
+
+  const handleOpenCamera = useCallback(async () => {
+    const options = {
+      noData: true,
+      mediaType: 'photo',
+    };
+    const result = await launchCamera(options, setPhoto);
+  });
+
+  function renderActions(props: Readonly<ActionsProps>) {
+    Ionicons.loadFont();
+
+    return (
+      <>
+        <Actions
+          {...props}
+          options={{
+            ['Attach a Photo']: () => handleChoosePhoto(),
+          }}
+          icon={() => <Ionicons name="attach" size={28} />}
+        />
+        <Actions
+          {...props}
+          options={{
+            ['Take new photo']: () => handleOpenCamera(),
+          }}
+          icon={() => <Ionicons name="camera" size={28} />}
+        />
+      </>
+    );
+  }
   return (
     <GiftedChat
       messages={messages}
       showAvatarForEveryMessage={true}
       renderUsernameOnMessage={true}
+      renderActions={renderActions}
       onSend={messages => onSend(messages)}
       user={{
         _id: auth()?.currentUser?.uid,
