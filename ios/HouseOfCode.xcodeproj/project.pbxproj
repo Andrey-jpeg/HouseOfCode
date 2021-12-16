@@ -41,6 +41,7 @@
 		6423831EA8574132BED9D8CC /* libPods-HouseOfCode.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HouseOfCode.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C97AB639B58BBB4B15BBE30 /* Pods-HouseOfCode-HouseOfCodeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HouseOfCode-HouseOfCodeTests.debug.xcconfig"; path = "Target Support Files/Pods-HouseOfCode-HouseOfCodeTests/Pods-HouseOfCode-HouseOfCodeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = HouseOfCode/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A5A75046276B4EA70049132C /* HouseOfCode.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = HouseOfCode.entitlements; path = HouseOfCode/HouseOfCode.entitlements; sourceTree = "<group>"; };
 		A5A93C46276739D50053D2A8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ABFE59519B596E51CEFDCCC0 /* libPods-HouseOfCode-HouseOfCodeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HouseOfCode-HouseOfCodeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0A881CF5CF3F2B244570E2A /* Pods-HouseOfCode.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HouseOfCode.debug.xcconfig"; path = "Target Support Files/Pods-HouseOfCode/Pods-HouseOfCode.debug.xcconfig"; sourceTree = "<group>"; };
@@ -88,6 +89,7 @@
 		13B07FAE1A68108700A75B9A /* HouseOfCode */ = {
 			isa = PBXGroup;
 			children = (
+				A5A75046276B4EA70049132C /* HouseOfCode.entitlements */,
 				A5A93C46276739D50053D2A8 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -509,6 +511,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = HouseOfCode/HouseOfCode.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = HouseOfCode/Info.plist;
@@ -535,6 +538,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = HouseOfCode/HouseOfCode.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = HouseOfCode/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

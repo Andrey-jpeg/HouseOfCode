@@ -11,20 +11,23 @@ const App = () => {
   on onAuthStateChanged i need to add a guard clause.
   else it complains about memory leak :) */
   useEffect(() => {
-    let mounted = true;
-    auth().onAuthStateChanged(userState => {
-      if (mounted) {
-        setUser(userState);
-      }
+    //setTimeout() is only included so the user can see the beautiful splashscreen when launching the app :)
+    setTimeout(() => {
+      let mounted = true;
+      auth().onAuthStateChanged(userState => {
+        if (mounted) {
+          setUser(userState);
+        }
 
-      if (isLoading) {
-        setIsLoading(false);
-      }
+        if (isLoading) {
+          setIsLoading(false);
+        }
 
-      return () => {
-        mounted = false;
-      };
-    });
+        return () => {
+          mounted = false;
+        };
+      });
+    }, 200);
   }, [isLoading]);
 
   return (

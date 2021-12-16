@@ -1,11 +1,13 @@
 import React from 'react';
-import {View} from 'react-native';
+import {ActivityIndicator, Image, View} from 'react-native';
 
 export const SplashScreen: React.FC = () => {
   return (
     <View
       style={{
         display: 'flex',
+        flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
       }}>
       <Image
@@ -14,6 +16,7 @@ export const SplashScreen: React.FC = () => {
         }}
         style={{resizeMode: 'contain', width: 300, height: 200}}
       />
+      <ActivityIndicator />
     </View>
   );
 };
