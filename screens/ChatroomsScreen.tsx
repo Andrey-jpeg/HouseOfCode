@@ -2,8 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {View, ActivityIndicator, FlatList, RefreshControl} from 'react-native';
 import {ChatRoomsItem} from '../components/ChatRoomsItem';
 import firestore from '@react-native-firebase/firestore';
-import PushNotification from 'react-native-push-notification';
-import {ChatRoom} from './ChatRoom';
 
 export type chatRoom = {
   id: string;
