@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {Component, useCallback, useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
 import {
   GiftedChat,
@@ -12,7 +12,6 @@ import {Alert} from 'react-native';
 import firebase from '@react-native-firebase/app';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {utils} from '@react-native-firebase/app';
 import storage from '@react-native-firebase/storage';
 
 export const ChatRoom: React.FC = ({route}) => {
@@ -83,7 +82,7 @@ export const ChatRoom: React.FC = ({route}) => {
             createdAt: doc.data().createdAt.toDate(),
             text: doc.data().text,
             user: doc.data().user,
-            image: doc.data()?.image,
+            image: doc.data()?.image && doc.data()?.image,
           })),
         ),
       );
@@ -104,8 +103,11 @@ export const ChatRoom: React.FC = ({route}) => {
   const onSend = useCallback(
     (messages = []) => {
       if (photo) {
-        uploadPhoto();
-        messages[0].image = 'https://reactjs.org/logo-og.png';
+        const uploadUri = photo.assets[0].uri;
+        let fileName = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
+        uploadPhoto(uploadUri, fileName);
+        messages[0].image =
+          'https://firebasestorage.googleapis.com/v0/b/houseofcode-cba8f.appspot.com/o/01E9723D-62BC-4548-A32B-27E2ADCEFE03.jpg?alt=media&token=bce0730a-cdd4-4bc7-8244-0df85902792c';
       }
       setMessages(previousMessages =>
         GiftedChat.append(previousMessages, messages),
@@ -123,36 +125,42 @@ export const ChatRoom: React.FC = ({route}) => {
           user,
         });
     },
-    [currentChatRoom],
+    [currentChatRoom, photo],
   );
 
-  const uploadPhoto = async () => {
-    const uploadUri = photo.assets[0].uri;
-    const fileName = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
-
+  const uploadPhoto = async (uploadUri: string, fileName: string) => {
     try {
-      await storage().ref(fileName).putFile(uploadUri);
+      let uploadTask = storage().ref(fileName).putFile(uploadUri);
+      return uploadTask
+        .then(snapshot => {
+          return snapshot.ref.getDownloadURL();
+        })
+        .then(url => {
+          return url;
+        });
     } catch (error) {
       console.log(error);
     }
+
+    /* try {
+      await storage().ref(fileName).putFile(uploadUri);
+    } catch (error) {
+      console.log(error);
+    } */
   };
 
   const handleChoosePhoto = useCallback(async () => {
-    const options = {
-      noData: true,
-      mediaType: 'photo',
-    };
-    const result = await launchImageLibrary(options, setPhoto);
-    console.log(result);
-  });
+    const result = await launchImageLibrary();
+    setPhoto(result);
+  }, []);
 
   const handleOpenCamera = useCallback(async () => {
     const options = {
       noData: true,
-      mediaType: 'photo',
     };
-    const result = await launchCamera(options, setPhoto);
-  });
+    const result = await launchCamera(options);
+    setPhoto(result);
+  }, []);
 
   function renderActions(props: Readonly<ActionsProps>) {
     Ionicons.loadFont();
