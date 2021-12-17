@@ -2,7 +2,7 @@
 
 When I started this asssignemnt I thought I was pretty good at React-native and TypeScript. However this assignment has honestly humbled me and I have to admit that I probably am not as good a developer as I thought.
 
-Realistically i have spent around ~30 hours to complete this assignment.
+Realistically i have spent around ~40 hours and I've had to give up.
 
 I have done all my styling as inline styling, as I've done very little styling at all so not much point in making dedicated styles, not that I can't
 
