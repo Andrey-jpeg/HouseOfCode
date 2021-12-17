@@ -129,18 +129,14 @@ export const ChatRoom: React.FC = ({route}) => {
   );
 
   const uploadPhoto = async (uploadUri: string, fileName: string) => {
-    try {
-      let uploadTask = storage().ref(fileName).putFile(uploadUri);
-      return uploadTask
-        .then(snapshot => {
-          return snapshot.ref.getDownloadURL();
-        })
-        .then(url => {
-          return url;
-        });
-    } catch (error) {
-      console.log(error);
-    }
+    storage().ref(fileName).putFile(uploadUri);
+
+    storage()
+      .ref('/' + uploadUri)
+      .getDownloadURL()
+      .then(downloadUrl => {
+        console.log('file available at!' + downloadUrl);
+      });
 
     /* try {
       await storage().ref(fileName).putFile(uploadUri);
